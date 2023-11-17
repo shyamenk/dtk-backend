@@ -9,6 +9,7 @@ const { sign } = require("jsonwebtoken");
 const authRouter = express.Router();
 
 authRouter.post("/register", async (req, res) => {
+  console.log("Hello");
   const { name, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = new User({
