@@ -1,10 +1,11 @@
 const express = require("express");
 const Appointment = require("../models/Appointment");
+const { verifyToken } = require("../controllers/authController");
 
 const appointmentRouter = express.Router();
 
 // Route to add a new appointment
-appointmentRouter.post("/", async (req, res) => {
+appointmentRouter.post("/", verifyToken, async (req, res) => {
   try {
     const { title, description, startDateTime, endDateTime } = req.body;
     const newAppointment = new Appointment({
@@ -22,7 +23,7 @@ appointmentRouter.post("/", async (req, res) => {
 });
 
 // Route to delete an appointment
-appointmentRouter.delete("/:id", async (req, res) => {
+appointmentRouter.delete("/:id", verifyToken, async (req, res) => {
   try {
     const appointmentId = req.params.id;
     const deletedAppointment = await Appointment.findByIdAndDelete(
@@ -39,7 +40,7 @@ appointmentRouter.delete("/:id", async (req, res) => {
 });
 
 // Route to get all upcoming appointments
-appointmentRouter.get("/upcoming", async (req, res) => {
+appointmentRouter.get("/upcoming", verifyToken, async (req, res) => {
   try {
     const currentDate = new Date();
     const upcomingAppointments = await Appointment.find({
